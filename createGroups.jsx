@@ -1,4 +1,4 @@
-#target illustrator
+// #target illustrator
 
 function replacePathsWithGroups() {
   // Check if there is an active document
