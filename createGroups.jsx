@@ -29,6 +29,16 @@ function replacePathsWithGroups() {
     return;
   }
 
+  //variables for creation. measures in points.
+  var circleDiameter = 90; // title path diameter
+  var titleFontSize = 10;
+  //text areas
+  var textWidth = 108; // Width in points
+  var textHeight = 63; // Height in points
+  var textFontSize = 10; //text font size
+  //plaeholder circle if no text is shown
+  var pCircleDiameter = 60;
+
   // Process each path item
   for (var j = 0; j < pathItems.length; j++) {
     var path = pathItems[j];
@@ -41,14 +51,12 @@ function replacePathsWithGroups() {
     if (groupName in data) {
       var d = data[groupName];
 
-      //alert("data for " + groupName + " : " + dataLine["title"] + " " + dataLine["context"] + " " + dataLine["bond"] + " " + dataLine["ground"])
-
       // Create group for the new items
       var group = doc.groupItems.add();
       group.name = groupName;
 
       // Create a circle centered on the path
-      var circleDiameter = 90;
+
       var circle = group.pathItems.ellipse(
         centerY + circleDiameter / 2,
         centerX - circleDiameter / 2,
@@ -59,24 +67,22 @@ function replacePathsWithGroups() {
       //circle.name = "title";
       circle.stroked = false;
       circle.filled = false;
-      circle.rotate(-90);
 
       // Create text path around the circle
       var textPath = group.textFrames.pathText(circle);
       textPath.name = "title";
       textPath.contents = d.title.length > 0 ? d.title : " ";
-      textPath.textRange.characterAttributes.size = 10; // Adjust text size as necessary
+      textPath.textRange.characterAttributes.size = titleFontSize; // Adjust text size as necessary
       textPath.textRange.characterAttributes.textFont = app.textFonts.getByName(
         "IndivisibleVarRoman-SemiBold"
       );
       textPath.textRange.justification = Justification.CENTER;
-      textPath.rotate(180);
+      textPath.rotate(90);
 
       // if the data must be shown, then createtext areas, otherwise just a circle
       if (d.showText === "TRUE") {
         // Create text area at the center of the original path
-        var textWidth = 108; // Width in points
-        var textHeight = 63; // Height in points
+
         var rect = group.pathItems.rectangle(
           centerY + textHeight / 2, // Y position
           centerX - textWidth / 2, // X position
@@ -87,7 +93,7 @@ function replacePathsWithGroups() {
         textArea.contents = d.context.length > 0 ? d.context : " ";
         textArea.name = "context";
         textArea.textRange.justification = Justification.CENTER;
-        textArea.textRange.characterAttributes.leading = 12;
+        textArea.textRange.characterAttributes.leading = textFontSize;
         textArea.textRange.characterAttributes.textFont =
           app.textFonts.getByName("IndivisibleVarRoman-Medium");
         var blueColor = new CMYKColor();
@@ -99,7 +105,7 @@ function replacePathsWithGroups() {
 
         // create a second area text, overlapped to the previous one, but yellow
         var rect2 = group.pathItems.rectangle(
-          centerY + textHeight / 2 - 6, // Y position
+          centerY + textHeight / 2 - textFontSize / 2, // Y position
           centerX - textWidth / 2, // X position
           textWidth, // Width
           textHeight // Height
@@ -108,7 +114,7 @@ function replacePathsWithGroups() {
         textArea2.contents = d.bond.length > 0 ? d.bond : " ";
         textArea2.name = "bond";
         textArea2.textRange.justification = Justification.CENTER;
-        textArea2.textRange.characterAttributes.leading = 12;
+        textArea2.textRange.characterAttributes.leading = textFontSize;
         textArea2.textRange.characterAttributes.textFont =
           app.textFonts.getByName("IndivisibleVarRoman-Medium");
         var yellowColor = new CMYKColor();
@@ -120,7 +126,7 @@ function replacePathsWithGroups() {
 
         // create a second area text, overlapped to the previous one, but yellow
         var rect3 = group.pathItems.rectangle(
-          centerY + textHeight / 2 - 12, // Y position
+          centerY + textHeight / 2 - textFontSize, // Y position
           centerX - textWidth / 2, // X position
           textWidth, // Width
           textHeight // Height
@@ -129,7 +135,7 @@ function replacePathsWithGroups() {
         textArea3.contents = d.ground.length > 0 ? d.ground : " ";
         textArea3.name = "ground";
         textArea3.textRange.justification = Justification.CENTER;
-        textArea3.textRange.characterAttributes.leading = 12;
+        textArea3.textRange.characterAttributes.leading = textFontSize;
         textArea3.textRange.characterAttributes.textFont =
           app.textFonts.getByName("IndivisibleVarRoman-Medium");
         var redColor = new CMYKColor();
@@ -142,10 +148,10 @@ function replacePathsWithGroups() {
         // Remove the original path
       } else {
         var circle = group.pathItems.ellipse(
-          centerY + 30,
-          centerX - 30,
-          60,
-          60,
+          centerY + pCircleDiameter / 2,
+          centerX - pCircleDiameter / 2,
+          pCircleDiameter,
+          pCircleDiameter,
           false
         );
         circle.stroked = false;
