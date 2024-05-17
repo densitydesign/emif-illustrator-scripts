@@ -64,7 +64,7 @@ function replacePathsWithGroups() {
       // Create text path around the circle
       var textPath = group.textFrames.pathText(circle);
       textPath.name = "title";
-      textPath.contents = d.title;
+      textPath.contents = d.title.length > 0 ? d.title : " ";
       textPath.textRange.characterAttributes.size = 10; // Adjust text size as necessary
       textPath.textRange.characterAttributes.textFont = app.textFonts.getByName(
         "IndivisibleVarRoman-SemiBold"
@@ -168,21 +168,21 @@ function replacePathsWithGroups() {
   );
 }
 
-function createHeaders(arr) {
-  var headers = {};
-  for (var i = 0; i < arr.length; i++) {
-    headers[arr[i]] = i;
-  }
-  return headers;
-}
+// function createHeaders(arr) {
+//   var headers = {};
+//   for (var i = 0; i < arr.length; i++) {
+//     headers[arr[i]] = i;
+//   }
+//   return headers;
+// }
 
-function createIds(arr, idIndex) {
-  var indexes = {};
-  for (var i = 0; i < arr.length; i++) {
-    indexes[arr[i][idIndex]] = i;
-  }
-  return indexes;
-}
+// function createIds(arr, idIndex) {
+//   var indexes = {};
+//   for (var i = 0; i < arr.length; i++) {
+//     indexes[arr[i][idIndex]] = i;
+//   }
+//   return indexes;
+// }
 
 function createObjFromCSV() {
   // Create a file-open dialog for the user to choose a CSV file
@@ -200,10 +200,10 @@ function createObjFromCSV() {
 
       //parse CSV and return it as array of arrays
       var csv = content.split("\n");
-      var headers = csv[0].split(",");
+      var headers = csv[0].split("\t");
       var results = {};
       for (var i = 1; i < csv.length; i++) {
-        var line = csv[i].split(",");
+        var line = csv[i].split("\t");
         var obj = {};
         for (var j = 1; j < line.length; j++) {
           obj[headers[j]] = line[j];
