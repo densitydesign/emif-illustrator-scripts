@@ -261,7 +261,7 @@ var iconCodes = {};
 
 for (var i = 0; i < icons.length; i++) {
   var icon = icons[i];
-  iconCodes[icon.code.charCodeAt(0).toString(16)] = true;
+  iconCodes[icon.code] = true;
 }
 
 function useFontAwesome(textFrame) {
@@ -270,9 +270,9 @@ function useFontAwesome(textFrame) {
   // Loop through each character in the text frame
   for (var i = 0; i < textFrame.textRange.characters.length; i++) {
     var character = textFrame.textRange.characters[i];
-    var characterCode = character.contents.charCodeAt(0).toString(16);
+    var characterCode = character.contents;
 
-    // Check if the character's Unicode code is f099
+    // Check if the character's Unicode code
     if (characterCode in iconCodes) {
       // Apply the FontAwesome font to this character
       character.textFont = app.textFonts.getByName("FontAwesome");
