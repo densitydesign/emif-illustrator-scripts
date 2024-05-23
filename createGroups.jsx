@@ -36,6 +36,7 @@ function replacePathsWithGroups() {
   var textWidth = 108; // Width in points
   var textHeight = 63; // Height in points
   var textFontSize = 10; //text font size
+  var textLeading = 11; // text leading
   //plaeholder circle if no text is shown
   var pCircleDiameter = 60;
 
@@ -101,7 +102,8 @@ function replacePathsWithGroups() {
         textArea.contents = d.context.length > 0 ? d.context : " ";
         textArea.name = "context";
         textArea.textRange.justification = Justification.CENTER;
-        textArea.textRange.characterAttributes.leading = textFontSize;
+        textArea.textRange.characterAttributes.autoLeading = false;
+        textArea.textRange.characterAttributes.leading = textLeading;
         textArea.textRange.characterAttributes.textFont =
           app.textFonts.getByName("IndivisibleVarRoman-Medium");
         var blueColor = new CMYKColor();
@@ -122,7 +124,8 @@ function replacePathsWithGroups() {
         textArea2.contents = d.bond.length > 0 ? d.bond : " ";
         textArea2.name = "bond";
         textArea2.textRange.justification = Justification.CENTER;
-        textArea2.textRange.characterAttributes.leading = textFontSize;
+        textArea2.textRange.characterAttributes.autoLeading = false;
+        textArea2.textRange.characterAttributes.leading = textLeading;
         textArea2.textRange.characterAttributes.textFont =
           app.textFonts.getByName("IndivisibleVarRoman-Medium");
         var yellowColor = new CMYKColor();
@@ -143,7 +146,8 @@ function replacePathsWithGroups() {
         textArea3.contents = d.ground.length > 0 ? d.ground : " ";
         textArea3.name = "ground";
         textArea3.textRange.justification = Justification.CENTER;
-        textArea3.textRange.characterAttributes.leading = textFontSize;
+        textArea3.textRange.characterAttributes.autoLeading = false;
+        textArea3.textRange.characterAttributes.leading = textLeading;
         textArea3.textRange.characterAttributes.textFont =
           app.textFonts.getByName("IndivisibleVarRoman-Medium");
         var redColor = new CMYKColor();
