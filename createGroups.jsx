@@ -106,6 +106,8 @@ function replacePathsWithGroups() {
         textArea.textRange.characterAttributes.leading = textLeading;
         textArea.textRange.characterAttributes.textFont =
           app.textFonts.getByName("IndivisibleVarRoman-Medium");
+        replaceWithIcons(textArea);
+        useFontAwesome(textArea);
         var blueColor = new CMYKColor();
         blueColor.cyan = 100;
         blueColor.magenta = 0;
@@ -128,6 +130,8 @@ function replacePathsWithGroups() {
         textArea2.textRange.characterAttributes.leading = textLeading;
         textArea2.textRange.characterAttributes.textFont =
           app.textFonts.getByName("IndivisibleVarRoman-Medium");
+        //replaceWithIcons(textArea2);
+        useFontAwesome(textArea2);
         var yellowColor = new CMYKColor();
         yellowColor.cyan = 0;
         yellowColor.magenta = 0;
@@ -150,6 +154,8 @@ function replacePathsWithGroups() {
         textArea3.textRange.characterAttributes.leading = textLeading;
         textArea3.textRange.characterAttributes.textFont =
           app.textFonts.getByName("IndivisibleVarRoman-Medium");
+        //replaceWithIcons(textArea3);
+        useFontAwesome(textArea3);
         var redColor = new CMYKColor();
         redColor.cyan = 0;
         redColor.magenta = 100;
@@ -239,6 +245,49 @@ function createObjFromCSV() {
     }
   } else {
     alert("No file selected.");
+  }
+}
+
+function useFontAwesome(textFrame) {
+  var icons = {
+    f099: true,
+    f16d: true,
+  };
+  // Check if any documents are open
+
+  // Loop through each character in the text frame
+  for (var i = 0; i < textFrame.textRange.characters.length; i++) {
+    var character = textFrame.textRange.characters[i];
+    var characterCode = character.contents.charCodeAt(0).toString(16);
+
+    // Check if the character's Unicode code is f099
+    if (characterCode in icons) {
+      // Apply the FontAwesome font to this character
+      character.textFont = app.textFonts.getByName("FontAwesome");
+    }
+  }
+}
+
+function replaceWithIcons(textFrame) {
+  var icons = [
+    { string: "twitter", code: "\uf099" },
+    { string: "Instagram", code: "\uf16d" },
+  ];
+  var textContent = textFrame.contents;
+
+  // Loop through each social media platform defined in the array using a traditional for loop
+  for (var i = 0; i < icons.length; i++) {
+    var platformName = icons[i].string;
+    var iconCode = icons[i].code;
+
+    // Create a case-insensitive regex for the platform name
+    var regex = new RegExp(platformName, "gi"); // 'g' for global, 'i' for case-insensitive
+
+    // Search and replace platform name with icon code, case insensitively
+    if (textContent.match(regex)) {
+      // Replace platform name with FontAwesome icon code
+      textFrame.contents = textContent.replace(regex, iconCode);
+    }
   }
 }
 
