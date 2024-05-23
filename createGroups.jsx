@@ -39,6 +39,14 @@ function replacePathsWithGroups() {
   //plaeholder circle if no text is shown
   var pCircleDiameter = 60;
 
+  // var test = [];
+  // for (e in data) {
+  //   test.push(e);
+  // }
+  // alert(test);
+
+  var errors = [];
+
   // Process each path item
   for (var j = 0; j < pathItems.length; j++) {
     var path = pathItems[j];
@@ -164,8 +172,9 @@ function replacePathsWithGroups() {
       }
       path.remove();
     } else {
-      alert("no data for " + groupName);
+      errors.push(groupName);
     }
+    alert("no data for " + errors);
   }
 
   alert(
@@ -192,7 +201,7 @@ function replacePathsWithGroups() {
 
 function createObjFromCSV() {
   // Create a file-open dialog for the user to choose a CSV file
-  var file = File.openDialog("Select a CSV file", "*.csv", false);
+  var file = File.openDialog("Select a TSV file", "*.tsv", false);
 
   if (file != null) {
     // Check if the user selected a file
@@ -202,7 +211,7 @@ function createObjFromCSV() {
       file.close(); // Close the file after reading
 
       // Optionally, process the CSV content here, or just display it
-      alert("CSV Content:\n" + content);
+      //alert("TSV Content:\n" + content);
 
       //parse CSV and return it as array of arrays
       var csv = content.split("\n");

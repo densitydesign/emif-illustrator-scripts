@@ -13,7 +13,7 @@ Before running the script, ensure you have:
 
 Your dataset must be prepared according to the following specifications:
 
-- The dataset should be in CSV format with the following columns: `ID, showText, title, context, bond, ground`.
+- The dataset should be in TSV format with the following columns: `ID   showText    title   context bond    ground`.
 - Ensure that there are no newline characters (return characters) within any cells of the dataset as they can cause the script to fail.
 - Each row in the dataset corresponds to a unique object within your Adobe Illustrator document.
 - The `ID` column in your dataset should match the names of objects within your Adobe Illustrator document.
