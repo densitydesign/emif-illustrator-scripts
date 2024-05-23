@@ -101,6 +101,7 @@ function replacePathsWithGroups() {
         var textArea = group.textFrames.areaText(rect);
         textArea.contents = d.context.length > 0 ? d.context : " ";
         textArea.name = "context";
+        textArea.blendingMode = BlendModes.MULTIPLY;
         textArea.textRange.justification = Justification.CENTER;
         textArea.textRange.characterAttributes.autoLeading = false;
         textArea.textRange.characterAttributes.leading = textLeading;
@@ -125,12 +126,13 @@ function replacePathsWithGroups() {
         var textArea2 = group.textFrames.areaText(rect2);
         textArea2.contents = d.bond.length > 0 ? d.bond : " ";
         textArea2.name = "bond";
+        textArea2.blendingMode = BlendModes.MULTIPLY;
         textArea2.textRange.justification = Justification.CENTER;
         textArea2.textRange.characterAttributes.autoLeading = false;
         textArea2.textRange.characterAttributes.leading = textLeading;
         textArea2.textRange.characterAttributes.textFont =
           app.textFonts.getByName("IndivisibleVarRoman-Medium");
-        //replaceWithIcons(textArea2);
+        replaceWithIcons(textArea2);
         useFontAwesome(textArea2);
         var yellowColor = new CMYKColor();
         yellowColor.cyan = 0;
@@ -149,12 +151,13 @@ function replacePathsWithGroups() {
         var textArea3 = group.textFrames.areaText(rect3);
         textArea3.contents = d.ground.length > 0 ? d.ground : " ";
         textArea3.name = "ground";
+        textArea3.blendingMode = BlendModes.MULTIPLY;
         textArea3.textRange.justification = Justification.CENTER;
         textArea3.textRange.characterAttributes.autoLeading = false;
         textArea3.textRange.characterAttributes.leading = textLeading;
         textArea3.textRange.characterAttributes.textFont =
           app.textFonts.getByName("IndivisibleVarRoman-Medium");
-        //replaceWithIcons(textArea3);
+        replaceWithIcons(textArea3);
         useFontAwesome(textArea3);
         var redColor = new CMYKColor();
         redColor.cyan = 0;
@@ -248,11 +251,20 @@ function createObjFromCSV() {
   }
 }
 
+var icons = [
+  { string: "twitter", code: "\uf099" },
+  { string: "Instagram", code: "\uf16d" },
+  { string: "twitch", code: "\uf1e8" },
+];
+
+var iconCodes = {};
+
+for (var i = 0; i < icons.length; i++) {
+  var icon = icons[i];
+  iconCodes[icon.code.charCodeAt(0).toString(16)] = true;
+}
+
 function useFontAwesome(textFrame) {
-  var icons = {
-    f099: true,
-    f16d: true,
-  };
   // Check if any documents are open
 
   // Loop through each character in the text frame
@@ -261,7 +273,7 @@ function useFontAwesome(textFrame) {
     var characterCode = character.contents.charCodeAt(0).toString(16);
 
     // Check if the character's Unicode code is f099
-    if (characterCode in icons) {
+    if (characterCode in iconCodes) {
       // Apply the FontAwesome font to this character
       character.textFont = app.textFonts.getByName("FontAwesome");
     }
@@ -269,10 +281,6 @@ function useFontAwesome(textFrame) {
 }
 
 function replaceWithIcons(textFrame) {
-  var icons = [
-    { string: "twitter", code: "\uf099" },
-    { string: "Instagram", code: "\uf16d" },
-  ];
   var textContent = textFrame.contents;
 
   // Loop through each social media platform defined in the array using a traditional for loop
