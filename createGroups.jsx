@@ -174,6 +174,9 @@ function replacePathsWithGroups() {
     } else {
       errors.push(groupName);
     }
+  }
+
+  if (errors.length > 0) {
     alert("no data for " + errors);
   }
 
