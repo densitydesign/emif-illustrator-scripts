@@ -251,9 +251,19 @@ function createObjFromCSV() {
   }
 }
 
-var icons = [
+var icons_generic = [
+  { string: "overwatch", code: "\uf11b" }, //games
+  { string: "fortnite", code: "\uf11b" }, //games
+  { string: "diamond", code: "\uf11b" }, //games
+  { string: "rocketleague", code: "\uf11b" }, //games
+  { string: "gaia", code: "\uf11b" }, //games
+];
+
+var icons_brands = [
+  { string: "tiktok", code: "\ue07b" },
+  { string: "discord", code: "\uf392" },
   { string: "twitter", code: "\uf099" },
-  { string: "Instagram", code: "\uf16d" },
+  { string: "instagram", code: "\uf16d" },
   { string: "twitch", code: "\uf1e8" },
   { string: "facebook", code: "\uf082" },
   { string: "linkedin", code: "\uf0e1" },
@@ -275,11 +285,20 @@ var icons = [
   { string: "behance", code: "\uf1b4" },
 ];
 
-var iconCodes = {};
+var icons = icons_brands.concat(icons_generic);
 
-for (var i = 0; i < icons.length; i++) {
-  var icon = icons[i];
-  iconCodes[icon.code] = true;
+var iconCodes_brands = {};
+
+for (var i = 0; i < icons_brands.length; i++) {
+  var icon = icons_brands[i];
+  iconCodes_brands[icon.code] = true;
+}
+
+var iconCodes_generic = {};
+
+for (var i = 0; i < icons_generic.length; i++) {
+  var icon = icons_generic[i];
+  iconCodes_generic[icon.code] = true;
 }
 
 function useFontAwesome(textFrame) {
@@ -291,9 +310,16 @@ function useFontAwesome(textFrame) {
     var characterCode = character.contents;
 
     // Check if the character's Unicode code
-    if (characterCode in iconCodes) {
+    if (characterCode in iconCodes_brands) {
       // Apply the FontAwesome font to this character
-      character.textFont = app.textFonts.getByName("FontAwesome");
+      character.textFont = app.textFonts.getByName(
+        "FontAwesome6Brands-Regular"
+      );
+    }
+    // Check if the character's Unicode code
+    if (characterCode in iconCodes_generic) {
+      // Apply the FontAwesome font to this character
+      character.textFont = app.textFonts.getByName("FontAwesome6Free-Solid");
     }
   }
 }
@@ -312,9 +338,11 @@ function replaceWithIcons(textFrame) {
     // Search and replace platform name with icon code, case insensitively
     if (textContent.match(regex)) {
       // Replace platform name with FontAwesome icon code
-      textFrame.contents = textContent.replace(regex, iconCode);
+      textContent = textContent.replace(regex, iconCode);
     }
   }
+
+  textFrame.contents = textContent;
 }
 
 var data = createObjFromCSV();
