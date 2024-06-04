@@ -33,8 +33,8 @@ function replacePathsWithGroups() {
   var circleDiameter = 90; // title path diameter
   var titleFontSize = 10;
   //text areas
-  var textWidth = 108; // Width in points
-  var textHeight = 63; // Height in points
+  var textWidth = 110; // Width in points
+  var textHeight = 80; // Height in points
   var textFontSize = 10; //text font size
   var textLeading = 11; // text leading
   //plaeholder circle if no text is shown
