@@ -124,7 +124,10 @@ function replacePathsWithGroups() {
           var compoundPath = reselected.pathItems[0];
 
           var textFrame = group.textFrames.areaText(compoundPath);
-          textFrame.contents = text;
+
+          var firstWord = text.split(" ")[0];
+          var checkText = firstWord.length === 1 ? "\n" + text : text;
+          textFrame.contents = checkText;
 
           return textFrame;
         }
