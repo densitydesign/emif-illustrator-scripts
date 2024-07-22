@@ -160,7 +160,7 @@ function replacePathsWithGroups() {
           centerY - textFontSize / 2,
           circleDiameter / 2,
           textWidth,
-          d.bond.length > 0 ? d.context : " "
+          d.bond.length > 0 ? d.bond : " "
         );
 
         textArea2.name = "bond";
@@ -186,7 +186,7 @@ function replacePathsWithGroups() {
           centerY - (textFontSize / 2) * 2,
           circleDiameter / 2,
           textWidth,
-          d.ground.length > 0 ? d.context : " "
+          d.ground.length > 0 ? d.ground : " "
         );
 
         // var rect3 = group.pathItems.rectangle(
