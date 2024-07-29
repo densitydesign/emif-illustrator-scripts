@@ -55,6 +55,8 @@ function replacePathsWithGroups() {
     var centerX = (bounds[0] + bounds[2]) / 2;
     var centerY = (bounds[1] + bounds[3]) / 2;
     var groupName = path.name || "UnnamedPath";
+    //remove original path
+    path.remove();
 
     // check if there is a corrsedponding element in data
     if (groupName in data) {
@@ -82,9 +84,8 @@ function replacePathsWithGroups() {
       textPath.name = "title";
       textPath.contents = d.title.length > 0 ? d.title : " ";
       textPath.textRange.characterAttributes.size = titleFontSize; // Adjust text size as necessary
-      textPath.textRange.characterAttributes.textFont = app.textFonts.getByName(
-        "IndivisibleVarRoman-SemiBold"
-      );
+      textPath.textRange.characterAttributes.textFont =
+        app.textFonts.getByName("Manrope-SemiBold");
       textPath.textRange.justification = Justification.CENTER;
       textPath.rotate(90);
 
@@ -92,21 +93,60 @@ function replacePathsWithGroups() {
       if (d.showText === "TRUE") {
         // Create text area at the center of the original path
 
-        var rect = group.pathItems.rectangle(
-          centerY + textHeight / 2, // Y position
-          centerX - textWidth / 2, // X position
-          textWidth, // Width
-          textHeight // Height
+        //function for the creation of the area
+        function createArea(x, y, radius, width, text) {
+          var innerPadding = 0;
+          var ic = group.pathItems.ellipse(
+            y + radius,
+            x - radius,
+            radius * 2 - innerPadding,
+            radius * 2 - innerPadding
+          );
+          var ir = group.pathItems.rectangle(
+            y, // Y position
+            x - width / 2, // X position
+            width, // Width
+            radius // Height
+          );
+          doc.selection = null;
+          var compGroup = group.groupItems.add();
+          compGroup.name = "tempPath";
+          ic.moveToBeginning(compGroup);
+          ir.moveToBeginning(compGroup);
+          compGroup.selected = true;
+          app.executeMenuCommand("Live Pathfinder Add");
+          app.executeMenuCommand("expandStyle");
+
+          //reseletct after creation
+          doc.selection = null;
+          var reselected = group.groupItems.getByName("tempPath");
+          var compoundPath = reselected.pathItems[0];
+
+          var textFrame = group.textFrames.areaText(compoundPath);
+
+          var firstWord = text.split(" ")[0];
+          var checkText = firstWord.length === 1 ? "\n" + text : text;
+          textFrame.contents = checkText;
+
+          return textFrame;
+        }
+
+        // text area 1
+        var textArea = createArea(
+          centerX,
+          centerY,
+          circleDiameter / 2,
+          textWidth,
+          d.context.length > 0 ? d.context : " "
         );
-        var textArea = group.textFrames.areaText(rect);
-        textArea.contents = d.context.length > 0 ? d.context : " ";
+
         textArea.name = "context";
         textArea.blendingMode = BlendModes.MULTIPLY;
         textArea.textRange.justification = Justification.CENTER;
         textArea.textRange.characterAttributes.autoLeading = false;
         textArea.textRange.characterAttributes.leading = textLeading;
         textArea.textRange.characterAttributes.textFont =
-          app.textFonts.getByName("IndivisibleVarRoman-Medium");
+          app.textFonts.getByName("Manrope-SemiBold");
         replaceWithIcons(textArea);
         useFontAwesome(textArea);
         var blueColor = new CMYKColor();
@@ -117,21 +157,21 @@ function replacePathsWithGroups() {
         textArea.textRange.characterAttributes.fillColor = blueColor;
 
         // create a second area text, overlapped to the previous one, but yellow
-        var rect2 = group.pathItems.rectangle(
-          centerY + textHeight / 2 - textFontSize / 2, // Y position
-          centerX - textWidth / 2, // X position
-          textWidth, // Width
-          textHeight // Height
+        var textArea2 = createArea(
+          centerX,
+          centerY - textFontSize / 2,
+          circleDiameter / 2,
+          textWidth,
+          d.bond.length > 0 ? d.bond : " "
         );
-        var textArea2 = group.textFrames.areaText(rect2);
-        textArea2.contents = d.bond.length > 0 ? d.bond : " ";
+
         textArea2.name = "bond";
         textArea2.blendingMode = BlendModes.MULTIPLY;
         textArea2.textRange.justification = Justification.CENTER;
         textArea2.textRange.characterAttributes.autoLeading = false;
         textArea2.textRange.characterAttributes.leading = textLeading;
         textArea2.textRange.characterAttributes.textFont =
-          app.textFonts.getByName("IndivisibleVarRoman-Medium");
+          app.textFonts.getByName("Manrope-SemiBold");
         replaceWithIcons(textArea2);
         useFontAwesome(textArea2);
         var yellowColor = new CMYKColor();
@@ -142,21 +182,30 @@ function replacePathsWithGroups() {
         textArea2.textRange.characterAttributes.fillColor = yellowColor;
 
         // create a second area text, overlapped to the previous one, but yellow
-        var rect3 = group.pathItems.rectangle(
-          centerY + textHeight / 2 - textFontSize, // Y position
-          centerX - textWidth / 2, // X position
-          textWidth, // Width
-          textHeight // Height
+
+        var textArea3 = createArea(
+          centerX,
+          centerY - (textFontSize / 2) * 2,
+          circleDiameter / 2,
+          textWidth,
+          d.ground.length > 0 ? d.ground : " "
         );
-        var textArea3 = group.textFrames.areaText(rect3);
-        textArea3.contents = d.ground.length > 0 ? d.ground : " ";
+
+        // var rect3 = group.pathItems.rectangle(
+        //   centerY + textHeight / 2 - textFontSize, // Y position
+        //   centerX - textWidth / 2, // X position
+        //   textWidth, // Width
+        //   textHeight // Height
+        // );
+        // var textArea3 = group.textFrames.areaText(rect3);
+        // textArea3.contents = d.ground.length > 0 ? d.ground : " ";
         textArea3.name = "ground";
         textArea3.blendingMode = BlendModes.MULTIPLY;
         textArea3.textRange.justification = Justification.CENTER;
         textArea3.textRange.characterAttributes.autoLeading = false;
         textArea3.textRange.characterAttributes.leading = textLeading;
         textArea3.textRange.characterAttributes.textFont =
-          app.textFonts.getByName("IndivisibleVarRoman-Medium");
+          app.textFonts.getByName("Manrope-SemiBold");
         replaceWithIcons(textArea3);
         useFontAwesome(textArea3);
         var redColor = new CMYKColor();
@@ -183,7 +232,6 @@ function replacePathsWithGroups() {
         color.black = 0;
         circle.fillColor = color;
       }
-      path.remove();
     } else {
       errors.push(groupName);
     }
